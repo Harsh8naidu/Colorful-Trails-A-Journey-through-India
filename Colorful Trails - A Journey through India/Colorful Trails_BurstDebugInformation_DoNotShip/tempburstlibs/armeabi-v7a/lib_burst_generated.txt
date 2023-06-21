@@ -143,6 +143,7 @@ Library: lib_burst_generated
 --root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Unity.TextMeshPro.dll
 --root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
 --root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
+--root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
 --root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Unity.Services.Core.Internal.dll
 --root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Unity.Services.Core.Analytics.dll
@@ -158,7 +159,6 @@ Library: lib_burst_generated
 --root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Unity.Services.Core.Networking.dll
 --root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Unity.InternalAPIEngineBridge.001.dll
 --root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Unity.Services.Core.Configuration.dll
---root-assembly=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --assembly-folder=C:\Colorful-Trails-A-Journey-through-India\Colorful Trails - A Journey through India\Temp\StagingArea\Data\Managed\
 --pdb-search-paths=Temp/ManagedSymbols/
 --method=Unity.Burst.BurstCompiler+BurstCompilerHelper, Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::IsBurstEnabled()--8c2be93e18276203cbd918daa2748a10
