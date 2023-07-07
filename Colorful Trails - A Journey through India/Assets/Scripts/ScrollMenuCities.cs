@@ -26,21 +26,21 @@ public class ScrollMenuCities : MonoBehaviour
 
         // Get distance between buttons
         citiesDistance = (int)Mathf.Abs(cities[1].GetComponent<RectTransform>().anchoredPosition.x - cities[0].GetComponent<RectTransform>().anchoredPosition.x);
-        Debug.Log(citiesDistance);
+      
     }
 
     void Update()
     {
-        for(int i = 0; i < cities.Length; i++)
+        for (int i = 0; i < cities.Length; i++)
         {
             distance[i] = Mathf.Abs(center.transform.position.x - cities[i].transform.position.x);
         }
 
-        float minDistance = Mathf.Min(distance);
+        float minDistance = Mathf.Min(distance); // Get the min distance
 
-        for(int index = 0; index < cities.Length; index++)
+        for (int index = 0; index < cities.Length; index++)
         {
-            if(minDistance == distance[index])
+            if (minDistance == distance[index])
             {
                 minCityNum = index;
             }
@@ -48,14 +48,14 @@ public class ScrollMenuCities : MonoBehaviour
 
         if (!dragging)
         {
-            LerpToButton(minCityNum * citiesDistance);
+            LerpToButton(minCityNum * -citiesDistance);
         }
 
     }
 
-    void LerpToButton(float position)
+    void LerpToButton(int position)
     {
-        float newX = Mathf.Lerp(panel.anchoredPosition.x, position, Time.deltaTime * 5f);
+        float newX = Mathf.Lerp(panel.anchoredPosition.x, position, Time.deltaTime * 1f);
         Vector2 newPosition = new Vector2(newX, panel.anchoredPosition.y);
 
         panel.anchoredPosition = newPosition;

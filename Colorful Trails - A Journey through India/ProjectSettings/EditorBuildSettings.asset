@@ -11,4 +11,22 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cities.unity
     guid: 766bd4bc63471ad4ea322cff7a9f8cca
+  - enabled: 1
+    path: Assets/Scenes/MumbaiLevels/MumbaiLevelsSelection.unity
+    guid: 5bb47fda977f253478abb96036dff40f
+  - enabled: 1
+    path: Assets/Scenes/InGameUI.unity
+    guid: 14e4f046c38d5aa48981cf8516cf34e0
+  - enabled: 1
+    path: Assets/Scenes/MumbaiLevels/MumbaiLevel2.unity
+    guid: 3fa98c9c794c9c1488b819e182dfc878
+  - enabled: 1
+    path: Assets/Scenes/MumbaiLevels/MumbaiLevel3.unity
+    guid: 32f9537d323c079418a207a1962c796e
+  - enabled: 1
+    path: Assets/Scenes/MumbaiLevels/MumbaiLevel4.unity
+    guid: 1956c2a46d2cfc94b83ee86eb70ad76a
+  - enabled: 1
+    path: Assets/Scenes/MumbaiLevels/MumbaiLevel5.unity
+    guid: 1a1fdc175b6c9674bba762f28b32c1a9
   m_configObjects: {}
