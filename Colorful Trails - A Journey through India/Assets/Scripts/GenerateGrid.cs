@@ -26,17 +26,70 @@ public class GenerateGrid : MonoBehaviour
 
     private void SetUp()
     {
-        for(int i = 0; i < width; i++)
+        List<int> tileCounts = new List<int>();
+
+        for (int i = 0; i < tiles.Length; i++)
         {
-            for(int j = 0; j < height; j++)
+            tileCounts.Add(0);
+        }
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
             {
-                Vector2 tempPositon = new Vector2(i * widthBetweenCell, j * heightBetweenCell);
-                int tilestoUse = Random.Range(0, tiles.Length);
-                GameObject tile = Instantiate(tiles[tilestoUse], tempPositon, Quaternion.identity, actualGrid);
+                Vector2 tempPosition = new Vector2(i * widthBetweenCell, j * heightBetweenCell);
+
+                int tileIndex = Random.Range(0, tiles.Length);
+                int maxIterations = 0;
+
+                while (MatchesAt(i, j, tiles[tileIndex]) && maxIterations < 100)
+                {
+                    tileIndex = Random.Range(0, tiles.Length);
+                    maxIterations++;
+                }
+                maxIterations = 0;
+
+                GameObject tile = Instantiate(tiles[tileIndex], tempPosition, Quaternion.identity, actualGrid);
                 tile.name = i + "," + j;
                 allActualTiles[i, j] = tile;
+
+                tileCounts[tileIndex]++;
             }
         }
+
         actualGrid.transform.position = new Vector2(xPosOfActualGrid, yPosOfActualGrid);
+    }
+
+    private bool MatchesAt(int column, int row, GameObject piece)
+    {
+        if(column > 1 && row > 1)
+        {
+            if(allActualTiles[column - 1, row].tag == piece.tag && allActualTiles[column - 2, row].tag == piece.tag)
+            {
+                return true;
+            }
+            if (allActualTiles[column, row - 1].tag == piece.tag && allActualTiles[column, row - 2].tag == piece.tag)
+            {
+                return true;
+            }
+        } else if(column <= 1 || row <= 1)
+        {
+            if(row > 1)
+            {
+                if(allActualTiles[column, row - 1].tag == piece.tag && allActualTiles[column, row - 2].tag == piece.tag)
+                {
+                    return true;
+                }
+            }
+            if (column > 1)
+            {
+                if (allActualTiles[column - 1, row].tag == piece.tag && allActualTiles[column - 2, row].tag == piece.tag)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

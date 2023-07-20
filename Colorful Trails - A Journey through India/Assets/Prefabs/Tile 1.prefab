@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -4883505965073926242}
   m_Layer: 5
   m_Name: Tile 1
-  m_TagString: Tile
+  m_TagString: Tile 1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,3 +106,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5d3180ef766b5c4f827706e6f4017e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMatched: 0
+  columnForCheckingMatches: 0
+  rowForCheckingMatches: 0
