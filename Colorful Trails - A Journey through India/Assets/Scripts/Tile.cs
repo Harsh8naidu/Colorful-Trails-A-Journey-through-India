@@ -14,11 +14,9 @@ public class Tile : MonoBehaviour, IPointerDownHandler
     Vector2 swipeEnd;
     float minimumDistance = 10f;
     public bool isMatched = false;
-    public int columnForCheckingMatches;
-    public int rowForCheckingMatches;
     private GenerateGrid grid;
-    private int columnForMatches;
-    private int rowForMatches;
+    public int rowForCheckingMatches;
+    public int columnForCheckingMatches;
 
     public enum SwipeDirection
     {
@@ -112,7 +110,6 @@ public class Tile : MonoBehaviour, IPointerDownHandler
     {
         // Get the name of the current tile
         string tileName = tile.name;
-        string directionOfSwipe = "";
 
         // Parse the row and column values from the tile name
         string[] nameParts = tileName.Split(',');
@@ -123,23 +120,19 @@ public class Tile : MonoBehaviour, IPointerDownHandler
             if (direction == SwipeDirection.Up) // Up
             {
                 otherRow += 1;
-                directionOfSwipe = "up";
             }
             else if (direction == SwipeDirection.Down) // Down
             {
                 otherRow -= 1;
-                directionOfSwipe = "down";
             }
             int otherColumn = column;
             if (direction == SwipeDirection.Right) // Right
             {
                 otherColumn += 1;
-                directionOfSwipe = "right";
             }
             else if (direction == SwipeDirection.Left) // Left
             {
                 otherColumn -= 1;
-                directionOfSwipe = "left";
             }
             otherTileName = otherColumn.ToString() + "," + otherRow.ToString();
 
@@ -160,6 +153,8 @@ public class Tile : MonoBehaviour, IPointerDownHandler
                 tile.name = otherTile.name;
                 otherTile.name = tempTile;
 
+                
+
                 FindMatches(row, column, otherRow, otherColumn, tile, otherTile, tileInitialPosition, otherTileInitialPosition);
             }
         }
@@ -173,9 +168,13 @@ public class Tile : MonoBehaviour, IPointerDownHandler
     private void FindMatches(int row, int column, int otherRow, int otherColumn, GameObject tile, GameObject otherTile, Vector3 tileInitialPosition, Vector3 otherTileInitialPosition)
     {
         string matchedTileName = "";
+        string tileTag = tile.tag;
+        string otherTileTag = otherTile.tag;
         GameObject matchedTile = null;
+        bool isTilesDestroyed = false;
         GameObject[] tilesToBreak = new GameObject[grid.height];
         GameObject[] otherTilesToBreak = new GameObject[grid.height];
+        int numberOfTilesToDestory = 0;
         int checkAdjacentRight = 1;
         int checkAdjacentRight1 = 1;
         int checkAdjacentLeft = 1;
@@ -193,205 +192,117 @@ public class Tile : MonoBehaviour, IPointerDownHandler
         {
             matchedTileName = i + "," + otherRow;
             matchedTile = GameObject.Find(matchedTileName);
+            string matchedTileTag = matchedTile.tag;
 
-            if (matchedTile.tag == tile.tag && checkAdjacentRight == checkAdjacentRight1)
+            if (matchedTileTag == tileTag && checkAdjacentRight == checkAdjacentRight1)
             {
-                tilesToBreak[checkAdjacentRight] = matchedTile;
+                tilesToBreak[numberOfTilesToDestory] = matchedTile;
                 checkAdjacentRight++;
+                numberOfTilesToDestory++;
             }
             checkAdjacentRight1++;
         }
 
-        if (checkAdjacentRight == 3 || checkAdjacentRight > 3)
-        {
-            Debug.Log(checkAdjacentRight);
-            for (int j = 0; j < checkAdjacentRight; j++)
-            {
-                Destroy(tilesToBreak[j]);
-            }
-        }
-
-        for (int i = otherColumn - 1; i >= 0; i--) // Left tiles
+        for (int i = otherColumn - 1; i > 0; i--) // Left tiles
         {
             matchedTileName = i + "," + otherRow;
             matchedTile = GameObject.Find(matchedTileName);
+            string matchedTileTag = matchedTile.tag;
 
-            if (matchedTile.tag == tile.tag && checkAdjacentLeft == checkAdjacentLeft1)
+            if (matchedTileTag == tileTag && checkAdjacentLeft == checkAdjacentLeft1)
             {
-                tilesToBreak[checkAdjacentLeft] = matchedTile;
-                if(checkAdjacentRight >= 2)
-                {
-                    Destroy(tilesToBreak[checkAdjacentLeft]);
-                }
+                tilesToBreak[numberOfTilesToDestory] = matchedTile;
                 checkAdjacentLeft++;
+                numberOfTilesToDestory++;
             }
             checkAdjacentLeft1++;
         }
 
-        if (checkAdjacentLeft == 3 || checkAdjacentLeft > 3)
+        // Destroying Horizontal matching tiles
+        if(numberOfTilesToDestory >= 3)
         {
-            Debug.Log(checkAdjacentLeft);
-            for (int j = 0; j < checkAdjacentLeft; j++)
+            for (int i = 0; i < numberOfTilesToDestory; i++)
             {
-                Destroy(tilesToBreak[j]);
+                Destroy(tilesToBreak[i]);
+                int[] tileCoordinates = GetTileCoordinates(tilesToBreak[i]);
+                grid.allActualTiles[tileCoordinates[0], tileCoordinates[1]] = null;
             }
+
+            isTilesDestroyed = true;
         }
 
-        // Check for vertical tiles
-        for (int i = otherRow; i < grid.height; i++) // Up tiles
+        numberOfTilesToDestory = 0;
+
+        // Finding Vertical matching tiles
+        for (int i = otherRow; i < grid.width; i++) // Up tiles
         {
             matchedTileName = otherColumn + "," + i;
             matchedTile = GameObject.Find(matchedTileName);
+            string matchedTileTag = matchedTile.tag;
 
-            if (matchedTile.tag == tile.tag && checkAdjacentUp == checkAdjacentUp1)
+            if (matchedTileTag == tileTag && checkAdjacentUp == checkAdjacentUp1)
             {
-                tilesToBreak[checkAdjacentUp] = matchedTile;
+                tilesToBreak[numberOfTilesToDestory] = matchedTile;
                 checkAdjacentUp++;
+                numberOfTilesToDestory++;
             }
             checkAdjacentUp1++;
         }
 
-        if (checkAdjacentUp == 3 || checkAdjacentUp > 3)
-        {
-            Debug.Log(checkAdjacentUp);
-            for (int j = 0; j < checkAdjacentUp; j++)
-            {
-                Destroy(tilesToBreak[j]);
-            }
-        }
-
-        for (int i = otherRow - 1; i >= 0; i--) // Down tiles
+        for (int i = otherRow - 1; i > 0; i--) // Down tiles
         {
             matchedTileName = otherColumn + "," + i;
             matchedTile = GameObject.Find(matchedTileName);
+            string matchedTileTag = matchedTile.tag;
 
-            if (matchedTile.tag == tile.tag && checkAdjacentDown == checkAdjacentDown1)
+            if (matchedTileTag == tileTag && checkAdjacentDown == checkAdjacentDown1)
             {
-                tilesToBreak[checkAdjacentDown] = matchedTile;
-                if (checkAdjacentUp >= 2)
-                {
-                    Destroy(tilesToBreak[checkAdjacentDown]);
-                }
+                tilesToBreak[numberOfTilesToDestory] = matchedTile;
                 checkAdjacentDown++;
+                numberOfTilesToDestory++;
             }
             checkAdjacentDown1++;
         }
 
-        if (checkAdjacentDown == 3 || checkAdjacentDown > 3)
+        // Destroying Vertical matching tiles
+        if(numberOfTilesToDestory >= 3)
         {
-            Debug.Log(checkAdjacentDown);
-            for (int j = 0; j < checkAdjacentDown; j++)
+            for (int i = 0; i < numberOfTilesToDestory; i++)
             {
-                Destroy(tilesToBreak[j]);
+                Destroy(tilesToBreak[i]);
+                int[] tileCoordinates = GetTileCoordinates(tilesToBreak[i]);
+                grid.allActualTiles[tileCoordinates[0], tileCoordinates[1]] = null;
             }
+
+            isTilesDestroyed = true;
         }
 
-        checkAdjacentRight = 0;
-        checkAdjacentRight1 = 0;
-        checkAdjacentLeft = 0;
-        checkAdjacentLeft1 = 0;
-        checkAdjacentDown = 0;
-        checkAdjacentDown1 = 0;
-        checkAdjacentUp = 0;
-        checkAdjacentUp1 = 0;
-
-        // Finding matches for otherTile
-        // ***********************************
-        // Check for horizontal matching tiles
-        for (int i = column; i < grid.width; i++) // Right tiles
-        {
-            matchedTileName = i + "," + row;
-            matchedTile = GameObject.Find(matchedTileName);
-
-            if (matchedTile.tag == otherTile.tag && checkAdjacentRight == checkAdjacentRight1)
-            {
-                otherTilesToBreak[checkAdjacentRight] = matchedTile;
-                checkAdjacentRight++;
-            }
-            checkAdjacentRight1++;
-        }
-
-        if (checkAdjacentRight == 3 || checkAdjacentRight > 3)
-        {
-            Debug.Log(checkAdjacentRight);
-            for (int j = 0; j < checkAdjacentRight; j++)
-            {
-                Destroy(otherTilesToBreak[j]);
-            }
-        }
-
-        for (int i = column - 1; i >= 0; i--) // Left tiles
-        {
-            matchedTileName = i + "," + row;
-            matchedTile = GameObject.Find(matchedTileName);
-
-            if (matchedTile.tag == otherTile.tag && checkAdjacentLeft == checkAdjacentLeft1)
-            {
-                otherTilesToBreak[checkAdjacentLeft] = matchedTile;
-                checkAdjacentLeft++;
-            }
-            checkAdjacentLeft1++;
-        }
-
-        if (checkAdjacentLeft == 3 || checkAdjacentLeft > 3)
-        {
-            Debug.Log(checkAdjacentLeft);
-            for (int j = 0; j < checkAdjacentLeft; j++)
-            {
-                Destroy(otherTilesToBreak[j]);
-            }
-        }
-
-        // Check for vertical tiles
-        for (int i = row; i < grid.height; i++) // Up tiles
-        {
-            matchedTileName = column + "," + i;
-            matchedTile = GameObject.Find(matchedTileName);
-
-            if (matchedTile.tag == otherTile.tag && checkAdjacentUp == checkAdjacentUp1)
-            {
-                otherTilesToBreak[checkAdjacentUp] = matchedTile;
-                checkAdjacentUp++;
-            }
-            checkAdjacentUp1++;
-        }
-
-        if (checkAdjacentUp == 3 || checkAdjacentUp > 3)
-        {
-            Debug.Log(checkAdjacentUp);
-            for (int j = 0; j < checkAdjacentUp; j++)
-            {
-                Destroy(otherTilesToBreak[j]);
-            }
-        }
-
-        for (int i = row - 1; i >= 0; i--) // Down tiles
-        {
-            matchedTileName = column + "," + i;
-            matchedTile = GameObject.Find(matchedTileName);
-
-            if (matchedTile.tag == otherTile.tag && checkAdjacentDown == checkAdjacentDown1)
-            {
-                otherTilesToBreak[checkAdjacentDown] = matchedTile;
-                checkAdjacentDown++;
-            }
-            checkAdjacentDown1++;
-        }
-
-        if (checkAdjacentDown == 3 || checkAdjacentDown > 3)
-        {
-            Debug.Log(checkAdjacentDown);
-            for (int j = 0; j < checkAdjacentDown; j++)
-            {
-                Destroy(otherTilesToBreak[j]);
-            }
-        }
-
-        /*if(checkAdjacentRight < 3 || checkAdjacentLeft < 3 || checkAdjacentUp < 3 || checkAdjacentDown < 3) 
+        if (!isTilesDestroyed)
         {
             // Animate the movement of the tiles
             LeanTween.move(tile, tileInitialPosition, 0.3f).setEase(LeanTweenType.easeOutQuad);
             LeanTween.move(otherTile, otherTileInitialPosition, 0.3f).setEase(LeanTweenType.easeOutQuad);
-        }*/
+        }
+
+        if (isTilesDestroyed)
+        {
+            grid.CollapseTiles();
+        }
     }
+
+    // Inside the Tile script
+    private int[] GetTileCoordinates(GameObject tileObject)
+    {
+        if(tileObject != null)
+        {
+            string tileName = tileObject.name;
+            string[] nameParts = tileName.Split(',');
+            if (nameParts.Length == 2 && int.TryParse(nameParts[0].Trim(), out int column) && int.TryParse(nameParts[1].Trim(), out int row))
+            {
+                return new int[] { column, row };
+            }
+        }
+        return new int[] { -1, -1 };
+    }
+
 }

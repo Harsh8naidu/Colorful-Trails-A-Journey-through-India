@@ -6,9 +6,9 @@ public class GoldenLiquidAnimation : MonoBehaviour
 {
     public Transform goldenLiquidImage;
 
-    private float initialPositionX = 295.44f;
-    private float finalPositionX = 249.0629f;
-    public float duration = 1f;
+    private float initialPositionX = 100.44f;
+    private float finalPositionX = 50.0629f;
+    public float duration = 30f;
 
     private void Start()
     {

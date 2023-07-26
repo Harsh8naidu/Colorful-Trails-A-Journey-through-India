@@ -14,8 +14,6 @@ public class GenerateGrid : MonoBehaviour
     public GameObject[,] allActualTiles;
     public float widthBetweenCell;
     public float heightBetweenCell;
-    public int targetX;
-    public int targetY;
 
     // Use this for initialization
     void Start()
@@ -91,5 +89,31 @@ public class GenerateGrid : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void CollapseTiles()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            int emptySpaces = 0;
+            for (int j = 0; j < height; j++)
+            {
+                if (allActualTiles[i, j] == null)
+                {
+                    emptySpaces++;
+                    Debug.Log(emptySpaces);
+                }
+                else if (emptySpaces > 0)
+                {
+                    // Move the non-empty tile to the empty space
+                    Vector3 newPosition = allActualTiles[i, j].transform.position - new Vector3(0, emptySpaces, 0) + new Vector3(0, -16f * emptySpaces, 0); ;
+                    allActualTiles[i, j].GetComponent<Tile>().rowForCheckingMatches = j - emptySpaces;
+                    LeanTween.move(allActualTiles[i, j], newPosition, 0.3f).setEase(LeanTweenType.easeOutQuad);
+
+                    allActualTiles[i, j - emptySpaces] = allActualTiles[i, j];
+                    allActualTiles[i, j] = null;
+                }
+            }
+        }
     }
 }
