@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MumbaiLevels/MumbaiLevelsSelection.unity
     guid: 5bb47fda977f253478abb96036dff40f
   - enabled: 1
-    path: Assets/Scenes/InGameUI.unity
-    guid: 14e4f046c38d5aa48981cf8516cf34e0
-  - enabled: 1
     path: Assets/Scenes/MumbaiLevels/MumbaiLevel1.unity
     guid: 79ed364eb76e95c46b8392841500ccb6
   m_configObjects: {}
